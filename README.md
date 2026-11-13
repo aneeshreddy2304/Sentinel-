@@ -21,7 +21,36 @@ Security classification models need to connect feature preparation and inference
 
 ## System architecture
 
-![Sentinel system architecture](docs/architecture-overview.svg)
+```mermaid
+flowchart TB
+    subgraph ExperimentPlane["Offline model experiment — Notebook.ipynb"]
+        Dataset["UNSW-NB15-style CSV<br/>external / not committed"]
+        Prep["Encoding • feature selection • resampling"]
+        Models["scikit-learn classifier experiments"]
+        Artifact["model_emb.sav<br/>expected / not committed"]
+        Dataset --> Prep --> Models --> Artifact
+    end
+
+    subgraph WebPlane["Flask prototype — app.py"]
+        Browser["HTML templates"]
+        Flask["Flask routes"]
+        Predict["Prediction form parser"]
+        Result["Classification template"]
+        Browser --> Flask --> Predict
+        Predict --> Result
+    end
+
+    subgraph PrototypeAuth["Separate prototype account flow"]
+        Signup["Signup / OTP / signin routes"]
+        SMTP["SMTP provider"]
+        Accounts[("signup.db<br/>removed in security PR #2")]
+        Signup --> SMTP
+        Signup --> Accounts
+    end
+
+    Artifact -. "loaded at prediction time" .-> Predict
+    Flask --> Signup
+```
 
 ### How the workflow operates
 
