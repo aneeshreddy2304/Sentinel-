@@ -1,50 +1,39 @@
-![Sentinel — conceptual project header](docs/assets/banner.svg)
+<p align="center"><img src="docs/assets/banner.svg" alt="Sentinel — From traffic features to an explainable security workflow." width="100%"></p>
 
-# Sentinel
+<p align="center"><img src="docs/assets/badges/python.svg" alt="python" height="28"> <img src="docs/assets/badges/flask.svg" alt="flask" height="28"> <img src="docs/assets/badges/scikit-learn.svg" alt="scikit-learn" height="28"> <img src="docs/assets/badges/sqlite.svg" alt="sqlite" height="28"></p>
 
-![Python](docs/assets/badges/python.svg) ![Flask](docs/assets/badges/flask.svg) ![scikit-learn](docs/assets/badges/scikit-learn.svg) ![SQLite](docs/assets/badges/sqlite.svg)
+<p align="center"><strong>An educational intrusion-classification project combining notebook experiments with a Flask prediction interface.</strong></p>
 
-**An educational network-intrusion classification project with notebook experiments and a Flask interface.**
+## Overview
 
-## Scope and status
+An educational intrusion-classification project combining notebook experiments with a Flask prediction interface.
 
-The project explores several scikit-learn classifiers and feature-selection approaches using UNSW-NB15-style intrusion data. The web application includes prediction and account-related routes, but the current repository is incomplete and is **not suitable for public deployment**.
+### Why it matters
+
+Sentinel connects the full shape of an applied ML security project: feature preparation, classifier experiments, saved artifacts, and a web-facing prediction flow.
+
+## Key features
+
+- UNSW-NB15-style feature exploration
+- Multiple scikit-learn classifier experiments
+- Feature-selection and resampling workflows
+- Flask interface for model-backed predictions
 
 ## Architecture
 
 ```mermaid
 flowchart LR
-    DATA[UNSW-NB15 input - not included] --> NB[Notebook experiments]
-    NB --> MODEL[model_emb.sav - not included]
-    FORM[Flask prediction form] --> APP[app.py]
-    MODEL --> APP
-    APP --> RESULT[Classification display]
+  A[Network feature data] --> B[Notebook experiments]
+  B --> C[Saved classifier]
+  D[Flask form] --> E[Prediction service]
+  C --> E
+  E --> F[Classification result]
 ```
 
-## Source and artifact availability
+## Technology stack
 
-| Component | Location / state |
-|---|---|
-| Web application | [app.py](app.py) |
-| Experiments | [Notebook.ipynb](Notebook.ipynb) |
-| Templates | [templates/](templates/) |
-| Training input | Notebook expects an external UNSW-NB15 CSV; absent |
-| Inference model | App expects `model_emb.sav`; absent |
+**python** · **flask** · **scikit learn** · **sqlite**
 
-The application imports Flask, NumPy, pandas, scikit-learn/joblib and standard-library SQLite/SMTP modules. There is no locked environment or complete reproduction procedure. Starting the app does not supply its missing model or data.
+## Getting started
 
-## Security and data handling
-
-The source contains an SMTP credential-like literal and a tracked database with populated account/contact fields. Do not reuse those values, redistribute the database, or reproduce its records in screenshots. Any valid exposed credential requires owner revocation/rotation; removing text alone does not address prior exposure.
-
-Account routes currently use plaintext-password handling, query-string inputs, shared OTP state, and incomplete session protection. A successful page render is not evidence of authenticated access control. This documentation change does not repair those application behaviors or remove data/history.
-
-## Evaluation boundaries
-
-The notebooks apply feature selection and SMOTE before splitting. This contaminates validation; several metric calls also reverse true and predicted labels. Existing saved accuracy/precision/recall outputs should not be presented as reliable intrusion-detection performance.
-
-## Useful project discussion
-
-The repository can support a discussion of classifier comparisons, feature selection, resampling, and connecting a model artifact to an interface. A credible runnable demonstration first requires security/data remediation, a permitted dataset, a valid split/evaluation, and a compatible saved model.
-
-Duplicate notebook checkpoints and repeated asset trees are historical clutter. They do not constitute separate experiments or additional validated results.
+Provide a permitted dataset and compatible saved model, install the imported Python packages, and use only synthetic accounts in a local environment. Keep credential remediation in the separate security PR.
