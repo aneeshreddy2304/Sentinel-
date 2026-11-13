@@ -1,3 +1,4 @@
+import os
 import numpy as np
 from flask import Flask, request, jsonify, render_template
 import joblib
@@ -51,23 +52,26 @@ def home():
 @app.route("/signup")
 def signup():
     global otp, username, name, email, number, password
+    smtp_email = os.environ.get("SMTP_EMAIL", "")
+    smtp_password = os.environ.get("SMTP_PASSWORD", "")
+    if not smtp_email or not smtp_password:
+        return jsonify(error="Email registration is not configured"), 503
     username = request.args.get('user','')
     name = request.args.get('name','')
     email = request.args.get('email','')
     number = request.args.get('mobile','')
     password = request.args.get('password','')
     otp = random.randint(1000,5000)
-    print(otp)
     msg = EmailMessage()
     msg.set_content("Your OTP is : "+str(otp))
     msg['Subject'] = 'OTP'
-    msg['From'] = "evotingotp4@gmail.com"
+    msg['From'] = smtp_email
     msg['To'] = email
     
     
     s = smtplib.SMTP('smtp.gmail.com', 587)
     s.starttls()
-    s.login("evotingotp4@gmail.com", "xowpojqyiygprhgr")
+    s.login(smtp_email, smtp_password)
     s.send_message(msg)
     s.quit()
     return render_template("val.html")
